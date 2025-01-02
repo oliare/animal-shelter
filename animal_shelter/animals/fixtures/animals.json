@@ -1,0 +1,92 @@
+[
+    {
+        "model": "animals.Animal",
+        "pk": 1,
+        "fields": {
+            "name": "Buddy",
+            "species": "Dogs",
+            "gender": "Male",
+            "age": "1-2 y.o.",
+            "breed": "Purebred",
+            "photo": "animals/buddy.jpg",
+            "description": "Friendly and energetic Labrador.",
+            "found_home": false,
+            "location": "Kyiv, Ukraine",
+            "date_added": "2024-12-28",
+            "neutered": true,
+            "vaccinated": true
+        }
+    },
+    {
+        "model": "animals.Animal",
+        "pk": 2,
+        "fields": {
+            "name": "Mittens",
+            "species": "Cats",
+            "gender": "Female",
+            "age": "2 - 5 y.o.",
+            "breed": "Unknown breed",
+            "photo": "animals/mittens.jpg",
+            "description": "Gentle and affectionate tabby cat.",
+            "found_home": false,
+            "location": "Lviv, Ukraine",
+            "date_added": "2024-12-28",
+            "neutered": true,
+            "vaccinated": true
+        }
+    },
+    {
+        "model": "animals.Animal",
+        "pk": 3,
+        "fields": {
+            "name": "Max",
+            "species": "Dogs",
+            "gender": "Male",
+            "age": "Older than 5 y.o.",
+            "breed": "Purebred",
+            "photo": "animals/max.jpg",
+            "description": "Loyal and calm senior German Shepherd.",
+            "found_home": true,
+            "location": "Odesa, Ukraine",
+            "date_added": "2024-12-28",
+            "neutered": true,
+            "vaccinated": true
+        }
+    },
+    {
+        "model": "animals.Animal",
+        "pk": 4,
+        "fields": {
+            "name": "Luna",
+            "species": "Cats",
+            "gender": "Female",
+            "age": "up to 1 y.o.",
+            "breed": "Unknown breed",
+            "photo": "animals/luna.jpg",
+            "description": "Playful kitten who loves to explore.",
+            "found_home": false,
+            "location": "Dnipro, Ukraine",
+            "date_added": "2024-12-28",
+            "neutered": false,
+            "vaccinated": false
+        }
+    },
+    {
+        "model": "animals.Animal",
+        "pk": 5,
+        "fields": {
+            "name": "Charlie",
+            "species": "Dogs",
+            "gender": "Male",
+            "age": "2 - 5 y.o.",
+            "breed": "Purebred",
+            "photo": "animals/charlie.jpg",
+            "description": "Energetic beagle who loves the outdoors.",
+            "found_home": false,
+            "location": "Kharkiv, Ukraine",
+            "date_added": "2024-12-28",
+            "neutered": true,
+            "vaccinated": true
+        }
+    }
+]
