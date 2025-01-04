@@ -3,7 +3,9 @@ from animals import views
 
 
 urlpatterns = [
-    path('', views.list),
-    path('create/', views.create),
-    path('delete/<int:id>/', views.delete),
+    path('', views.AnimalList.as_view()),
+    path('create/', views.CreateAnimal.as_view()),
+    path('<int:pk>/', views.AnimalDetail.as_view()),
+    path('<int:pk>/delete/', views.DeleteAnimal.as_view()),
+    path('<int:pk>/update/', views.UpdateAnimal.as_view()),
 ]
