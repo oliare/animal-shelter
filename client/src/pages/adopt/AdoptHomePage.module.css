@@ -1,0 +1,39 @@
+/* .legs {
+    height: auto;
+    width: 100px;
+    background-repeat: no-repeat;
+    background-size: contain;
+    opacity: 0.2;
+    transform: rotate(-40deg);
+} */
+ 
+.container {
+    padding: 50px;
+}
+
+/* button */
+.adopt {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+}
+
+.btnAllPets {
+    background-color: rgba(255, 255, 255, 0.51);
+    margin-top: auto;
+    padding: 10px 30px;
+    color: rgba(176, 88, 182, 0.79);
+    font-size: 20px;
+    font-weight: bold;
+    border: 1px solid gray;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+    letter-spacing: 5px;
+}
+
+.btnAllPets:hover {
+    background-color: #ffff;
+    color: rgb(50, 136, 173);
+    box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.5);
+    
+}

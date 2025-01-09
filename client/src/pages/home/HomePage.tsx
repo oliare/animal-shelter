@@ -1,21 +1,21 @@
-import './HomePage.css'
+import styles from './HomePage.module.css'
 import AboutUsPage from '../about/AboutUsPage'
-import AdoptPage from '../adopt/AdoptPage'
+import AdoptPage from '../adopt/AdoptHomePage'
 
 const HomePage = () => {
     return (
         <>
-            <div className="background-pets">
-                <div className="sound-container">
-                    <div className="meow-container">
+            <div className={styles.bgPets}>
+                <div className={styles.sounds}>
+                    <div className={styles.meow}>
                         <p>Meow</p>
                     </div>
-                    <div className="bark-container">
+                    <div className={styles.bark}>
                         <p>Woof</p>
                     </div>
                 </div>
-                <div className="adopt-container">
-                    <button className="btn-adopt">
+                <div className={styles.adopt}>
+                    <button className={styles.btnAdopt}>
                         Adopt Now
                     </button>
                 </div>

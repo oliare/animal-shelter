@@ -1,0 +1,65 @@
+.logo {
+    height: 10vh;
+}
+
+.header {
+    position: absolute;
+    z-index: 100;
+    width: 100%;
+    /* background-image: url('images/home-page.png');
+    position: fixed;
+    height: 13vh;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed; */
+}
+
+.header ul li {
+    display: inline-block;
+    position: relative;
+}
+
+.header ul li:hover {
+    color: rgb(123, 89, 89);
+}
+
+.header ul li::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    top: 3.5vh;
+    left: 0;
+    width: 100%;
+    border-bottom: 2px solid;
+    transform: scaleX(0);
+    transition: transform 0.3s ease-out;
+}
+
+.header ul li:hover::after {
+    transform: scaleX(1);
+}
+
+.btn-login {
+    margin-right: 10px;
+    border: 1px solid rgb(77, 77, 77);
+    border-radius: 10px;
+}
+
+.btn-login:hover {
+    border: 1px solid rgba(255, 255, 255, 0.518);
+    color: rgba(255, 255, 255, 0.79);
+    box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.4);
+}
+
+.btn-register {
+    background-color: rgba(116, 116, 116, 0.67);
+    border: 1px solid rgb(77, 77, 77);
+    border-radius: 10px;
+}
+
+.btn-register:hover {
+    
+    border: 1px solid rgba(255, 255, 255, 0.518);
+    color: rgba(221, 221, 221, 0.79);
+    box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.4);
+}
