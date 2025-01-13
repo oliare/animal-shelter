@@ -4,6 +4,7 @@ import Layout from './components/layout/Layout';
 import HomePage from './pages/home/HomePage';
 import AboutUsPage from './pages/about/AboutUsPage';
 import AdoptHomePage from './pages/adopt/AdoptHomePage';
+import CreateAnimalPage from './pages/create-animal/CreateAnimalPage';
 
 function App() {
 
@@ -12,6 +13,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<HomePage />} />
+          <Route path='/create-animal' element={<CreateAnimalPage />} />
           <Route path='/about-us' element={<AboutUsPage />} />
           <Route path='/adopt' element={<AdoptHomePage />} />
         </Route>

@@ -50,6 +50,9 @@ const Header = () => {
                                     <Link to="/about-us">About us</Link>
                                 </li>
                                 <li>
+                                    <Link to="/create-animal">Add animal</Link>
+                                </li>
+                                <li>
                                     <Link to="/adopt">Adopt</Link>
                                 </li>
                                 <li>
