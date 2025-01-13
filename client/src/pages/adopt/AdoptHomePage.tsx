@@ -19,11 +19,11 @@ const AdoptPage: React.FC = () => {
 
     // for adopt button visibility
     const isHomePage = location.pathname == '/' || location.pathname == '/home';
-    console.log(http_service + "/animals/")
+    console.log("API URL: ", import.meta.env.VITE_API_URL);
 
     useEffect(() => {
         http_service
-            .get<IAnimalItem[]>(`http://127.0.0.1:8000/animals/`)
+            .get<IAnimalItem[]>(`/animals/`)
             .then((response) => {
                 setItems(response.data);
                 setLoading(false);
@@ -106,7 +106,7 @@ const AdoptPage: React.FC = () => {
 
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+                <div className="grid grid-cols-1 sm:grid-cols-2 :grid-cols-4 lg:grid-cols-4 gap-10">
                     {items && Array.isArray(items) && items.length > 0 ? (
                         (isHomePage ? items.slice(0, 4) : items).map((item) => (
 

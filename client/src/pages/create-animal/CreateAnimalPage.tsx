@@ -11,7 +11,7 @@ const CreateAnimalPage = () => {
 
     const navigate = useNavigate();
     const [form] = Form.useForm<IAnimalCreate>();
-    const [loading, setLoading] = useState<boolean>(false);
+    // const [loading, setLoading] = useState<boolean>(false);
 
     const [params, setParams] = useState<ISelectParams>({
         species: {},
@@ -25,7 +25,7 @@ const CreateAnimalPage = () => {
     const [previewTitle, setPreviewTitle] = useState('');
 
     useEffect(() => {
-        http_service.get<ISelectParams>("http://127.0.0.1:8000/animals/select-items/")
+        http_service.get<ISelectParams>("animals/select-items/")
             .then(resp => {
                 setParams(resp.data);
             });
@@ -33,7 +33,7 @@ const CreateAnimalPage = () => {
 
 
     const onSubmit = async (values: IAnimalCreate) => {
-        setLoading(true);
+        // setLoading(true);
         try {
             const animalData = {
                 ...values,
@@ -42,7 +42,7 @@ const CreateAnimalPage = () => {
             };
             console.log("Send Data:", animalData);
 
-            http_service.post("http://127.0.0.1:8000/animals/create/", animalData,
+            http_service.post("animals/create/", animalData,
                 {
                     headers: { "Content-Type": "multipart/form-data" }
                 }).then(resp => {
@@ -52,7 +52,7 @@ const CreateAnimalPage = () => {
         } catch (error) {
             console.error("Error creating animal:", error);
         } finally {
-            setLoading(false);
+            // setLoading(false);
         }
     };
 
