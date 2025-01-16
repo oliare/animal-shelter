@@ -5,16 +5,19 @@ from .models import Animal, AnimalImage
 class AnimalImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = AnimalImage
-        fields = "__all__"
+        fields = ["id", "animal", "photo"]
 
 class AnimalSerializer(serializers.ModelSerializer):
     images = AnimalImageSerializer(many=True, read_only=True)
+    uploaded_images = serializers.ListField(
+        child=serializers.ImageField(), write_only=True, required=False
+    )
     class Meta:
         model = Animal
         fields = [
                     'id', 'name', 'species', 'gender', 'age', 'breed', 'description',
                     'found_home', 'location', 'date_added', 'neutered', 'vaccinated',
-                    'images'
+                    'images', 'uploaded_images'
                 ]
         
     def validate_breed(self, value):
