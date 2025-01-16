@@ -77,9 +77,19 @@ WSGI_APPLICATION = 'server.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': BASE_DIR / 'db.sqlite3',
+    # }
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'mssql',
+        'NAME': 'AnimalShelterDb',
+        "USER": "",
+        "PASSWORD": "",
+        "HOST": "(localdb)\MSSQLLocalDB",
+        "PORT": "",
+        "OPTIONS": {"driver": "ODBC Driver 17 for SQL Server", 
+        },
     }
 }
 
