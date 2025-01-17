@@ -1,11 +1,12 @@
 import styles from './AdoptHomePage.module.css';
-import { DeleteOutlined, EditOutlined, EllipsisOutlined } from '@ant-design/icons';
+import { EditOutlined, EllipsisOutlined } from '@ant-design/icons';
 import { Button, Card, Select, Space } from 'antd';
 import { useEffect, useState } from 'react';
-import { IAnimalItem } from '../../interfaces/animals';
+import { IAnimalImage, IAnimalItem } from '../../interfaces/animals';
 import { http_service } from '../../api';
 import { Link } from 'react-router-dom';
 import defaultPhoto from '/images/pet-placeholder.png'
+import { DeleteDialog } from '../../common/delete-modal/DeleteModal';
 
 const { Meta } = Card;
 
@@ -16,6 +17,13 @@ const AdoptPage: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const [filtersVisible, setFiltersVisible] = useState<boolean>(false);
+    const [images, setImages] = useState<IAnimalImage[]>([]);
+
+
+    useEffect(() => {
+        http_service
+            .get<IAnimalImage[]>(`media/animals/1.jpg`)
+    })
 
     // for adopt button visibility
     const isHomePage = location.pathname == '/' || location.pathname == '/home';
@@ -42,9 +50,19 @@ const AdoptPage: React.FC = () => {
         setFiltersVisible(!filtersVisible);
     };
 
+    const handleDelete = (id: number) => {
+        try {
+            http_service.delete(`animals/delete/${id}`)
+            setItems(items.filter(i => i.id != id))
+            console.log(`The product with id ${id} has been deleted`);
+        } catch (error) {
+            console.log("Animal deletion error: ", error);
+        }
+    }
+
     return (
         <>
-            <div className={`${styles.container} mt-[40px]`}>
+            <div className={`${styles.container} mt-[40px] ml-5`}>
                 <h2 className="font-bold text-center my-8">Adopt a Pet</h2>
                 <p className="text-center text-lg mb-8">Find your new furry friend! Browse our list of animals available for adoption and make a difference in their life 🐾</p>
 
@@ -106,46 +124,51 @@ const AdoptPage: React.FC = () => {
 
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 :grid-cols-4 lg:grid-cols-4 gap-10">
+                {/* <div className="flex flex-wrap justify-center items-center gap-10"> */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 :grid-cols-4 lg:grid-cols-4 gap-8">
+
                     {items && Array.isArray(items) && items.length > 0 ? (
                         (isHomePage ? items.slice(0, 4) : items).map((item) => (
 
                             <Card
-                            className={`${styles.card} shadow-lg mb-10`}
-                            key={item.id}
-                            style={{ width: 280 }}
-                            cover={
-                                <img
-                                src={defaultPhoto}
-                                alt={item.name}
-                                    className="w-full h-auto"
+                                className={`${styles.card} shadow-lg mb-10`}
+                                key={item.id}
+                                style={{ width: 300 }}
+                                cover={
+                                    <img
+                                        // src={defaultPhoto}
+                                        src={item.images[0] ? `http://127.0.0.1:8000/media/animals/${item.images[0]}` : defaultPhoto}
+                                        alt={item.name}
+                                        className="w-full h-auto"
+                                    />
+                                }
+                                actions={
+                                    userRole === 'admin'
+                                        ? [
+                                            <Link to={`/update/${item.id}`}><EditOutlined key="edit" /></Link>,
+                                            <EllipsisOutlined key="ellipsis" />,
+                                            <DeleteDialog title={"Notification"}
+                                                description={`Are you sure you want to delete '${item.name}'?`}
+                                                onSubmit={() => handleDelete(item.id)}>
+                                            </DeleteDialog>
+                                        ]
+                                        : [<Button className='btnAdopt'>Adopt</Button>]
+                                }>
+                                <Meta
+                                    title={item.name}
+                                    description={`Sex: ${item.gender}`}
                                 />
-                            }
-                            actions={
-                                userRole === 'admin'
-                                    ? [
-                                        <EditOutlined key="edit" />,
-                                        <DeleteOutlined key="delete" />,
-                                        <EllipsisOutlined key="ellipsis" />,
-                                    ]
-                                    : [<Button className='btnAdopt'>Adopt</Button>]
-                            }
-                        >
-                            <Meta
-                                title={item.name}
-                                description={`Sex: ${item.gender}`}
-                            />
-                        </Card>
-                        
+                            </Card>
+
                         ))
                     ) : (
                         <div>No animals available</div>
                     )}
                 </div>
 
+
+
             </div>
         </>
     );
 };
-
-export default AdoptPage;

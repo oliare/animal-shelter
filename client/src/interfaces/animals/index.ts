@@ -11,10 +11,28 @@ export interface IAnimalItem {
     date_added: Date;
     neutered: boolean;
     vaccinated: boolean;
-    images: File[];
+    images: string[];
+}
+
+export interface IAnimalImage{
+    id: number; 
+    animal: number;
+    photo: string;
 }
 
 export interface IAnimalCreate {
+    name: string;
+    species: string;
+    gender: string;
+    age: string;
+    breed: string;
+    description?: string;
+    location: string;
+    neutered?: boolean;
+    vaccinated?: boolean;
+    uploaded_images: File[]; 
+}
+export interface IAnimalEdit {
     id: number;
     name: string;
     species: string;

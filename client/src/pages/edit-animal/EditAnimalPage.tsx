@@ -1,16 +1,18 @@
 import { useEffect, useState } from 'react';
 import { Form, Input, Button, Modal, Upload, UploadFile, Space, Select, Checkbox } from 'antd';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useParams } from 'react-router-dom';
 import { http_service } from '../../api';
 import { RcFile, UploadChangeParam } from "antd/es/upload";
 import { PlusOutlined } from '@ant-design/icons';
-import { IAnimalCreate, ISelectParams } from '../../interfaces/animals';
+import { IAnimalEdit, IAnimalItem, ISelectParams } from '../../interfaces/animals';
 // import Loader from '../../common/loader/Loader';
 
-const CreateAnimalPage = () => {
+const EditAnimalPage = () => {
 
+    const { id } = useParams();
     const navigate = useNavigate();
-    const [form] = Form.useForm<IAnimalCreate>();
+    const [form] = Form.useForm<IAnimalEdit>();
+    const [files, setFiles] = useState<UploadFile[]>([]);
     // const [loading, setLoading] = useState<boolean>(false);
 
     const [params, setParams] = useState<ISelectParams>({
@@ -19,6 +21,7 @@ const CreateAnimalPage = () => {
         age: {},
         breed: {}
     });
+
     const [previewOpen, setPreviewOpen] = useState<boolean>(false);
     const [isPurebred, setIsPurebred] = useState<boolean>(false);
     const [previewImage, setPreviewImage] = useState('');
@@ -31,73 +34,49 @@ const CreateAnimalPage = () => {
             });
     }, []);
 
+    useEffect(() => {
+        http_service.get<IAnimalItem>(`/animals/detail/${id}`)
+            .then(resp => {
+                console.log("API Response: ", resp.data);
+                const { data } = resp;
+                form.setFieldsValue({ ...resp.data });
 
-    const onSubmit = async (values: IAnimalCreate) => {
-        // setLoading(true);
+                const newFileList: UploadFile[] = [];
+                for (let i = 0; i < data.images.length; i++) {
+                    newFileList.push({
+                        uid: data.uploaded_images[i],
+                        name: data.uploaded_images[i],
+                        status: "done",
+                        originFileObj: new File([new Blob([''])], data.uploaded_images[i]),
+                    } as UploadFile);
+                }
+                setFiles(newFileList);
+            })
+            .catch(error => {
+                console.error("Error fetching product details:", error);
+            });
+    }, []);
+
+    const onSubmit = async (values: IAnimalEdit) => {
         try {
-            const animalData = {
+            const updatedAnimal: IAnimalEdit = {
                 ...values,
-                vaccinated: values.vaccinated !== undefined ? values.vaccinated : false,
-                neutered: values.neutered !== undefined ? values.neutered : false,
-            };
-            console.log("Send Data:", animalData);
-            console.log("Images:", animalData.uploaded_images);
-
-            const convertToFormData = (data: Record<string, any>, parentKey: string = ''): FormData => {
-                const formData = new FormData();
-
-                Object.entries(data).forEach(([key, value]) => {
-                    const formKey = parentKey ? `${parentKey}[${key}]` : key;
-
-                    if (value instanceof File) {
-                        formData.append(formKey, value);
-                    } else if (Array.isArray(value)) {
-                        // Handle arrays
-                        value.forEach((item, index) => {
-                            const arrayKey = `${formKey}[${index}]`;
-                            if (item instanceof File) {
-                                formData.append(arrayKey, item);
-                            } else if (typeof item === 'object') {
-                                // Recursively handle objects within arrays
-                                const nestedFormData = convertToFormData(item, arrayKey);
-                                nestedFormData.forEach((val, nestedKey) => {
-                                    formData.append(nestedKey, val);
-                                });
-                            } else {
-                                formData.append(arrayKey, item);
-                            }
-                        });
-                    } else if (typeof value === 'object' && value !== null) {
-                        // Recursively handle nested objects
-                        const nestedFormData = convertToFormData(value, formKey);
-                        nestedFormData.forEach((val, nestedKey) => {
-                            formData.append(nestedKey, val);
-                        });
-                    } else {
-                        // Handle primitive values
-                        formData.append(formKey, value);
-                    }
-                });
-
-                return formData;
+                uploaded_images: files
+                    .map(file => file.originFileObj as File),
             };
 
-            // Convert animalData to FormData
-            const formData = convertToFormData(animalData);
+            console.log("Animal updated: ", updatedAnimal);
+            // const resp = await http_service.put<IAnimalEdit>(`/animals/update`, updatedAnimal, {
+            //     headers: { "Content-Type": "multipart/form-data" }
+            // });
 
-            http_service.post<IAnimalCreate>("animals/create", formData,
-                {
-                    headers: { "Content-Type": "multipart/form-data" }
-                }).then(resp => {
-                    console.log("Animal created:", resp.data);
-                    navigate(`/adopt`);
-                });
+            // console.log("Animal updated: ", resp.data);
+            // navigate('/adopt');
         } catch (error) {
-            console.error("Error creating animal:", error);
-        } finally {
-            // setLoading(false);
+            console.error("Error updating animal: ", error);
         }
     };
+
 
     const filterOptions = (options: Record<string, string>) => {
         return Object.entries(options).filter(([value]) => value !== "All" && value !== "All pets");
@@ -108,7 +87,7 @@ const CreateAnimalPage = () => {
         // <Loader />
         // ) : (
         <>
-            <p className="text-center text-3xl font-bold mt-[120px] mb-7">Create Animal</p>
+            <p className="text-center text-3xl font-bold mt-[120px] mb-7">Edit Animal</p>
             <Form form={form} onFinish={onSubmit} labelCol={{ span: 7 }} wrapperCol={{ span: 11 }}>
                 <Form.Item name="name" label="Name" hasFeedback
                     rules={[{ required: true, message: 'Please provide a valid name.' }]}>
@@ -205,29 +184,6 @@ const CreateAnimalPage = () => {
                         </div>
                     </Upload>
                 </Form.Item>
-                {/* <Form.Item name="uploaded_images" label="Photo" valuePropName="Image"
-                    rules={[{ required: true, message: "Please provide an animal image." }]}
-                    getValueFromEvent={(e: UploadChangeParam) => {
-                        return e?.fileList.map(file => file.originFileObj);
-                    }}>
-
-                    <Upload beforeUpload={() => false} accept="image/*" maxCount={10} listType="picture-card" multiple
-                        onPreview={(file: UploadFile) => {
-                            if (!file.url && !file.preview) {
-                                file.preview = URL.createObjectURL(file.originFileObj as RcFile);
-                            }
-
-                            setPreviewImage(file.url || (file.preview as string));
-                            setPreviewOpen(true);
-                            setPreviewTitle(file.name || file.url!.substring(file.url!.lastIndexOf('/') + 1));
-                        }}>
-
-                        <div>
-                            <PlusOutlined />
-                            <div style={{ marginTop: 8 }}>Upload</div>
-                        </div>
-                    </Upload>
-                </Form.Item> */}
 
                 <Form.Item wrapperCol={{ span: 10, offset: 10 }}>
                     <Space>
@@ -248,4 +204,4 @@ const CreateAnimalPage = () => {
     );
 };
 
-export default CreateAnimalPage;
+export default EditAnimalPage;
