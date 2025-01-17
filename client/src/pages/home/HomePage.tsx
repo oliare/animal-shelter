@@ -1,6 +1,6 @@
 import styles from './HomePage.module.css'
 import AboutUsPage from '../about/AboutUsPage'
-import AdoptPage from '../adopt/AdoptHomePage'
+import AdoptPage from '../adopt/AdoptPage'
 
 const HomePage = () => {
     return (

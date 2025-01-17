@@ -14,12 +14,6 @@ export interface IAnimalItem {
     images: string[];
 }
 
-export interface IAnimalImage{
-    id: number; 
-    animal: number;
-    photo: string;
-}
-
 export interface IAnimalCreate {
     name: string;
     species: string;

@@ -1,8 +1,8 @@
-import styles from './AdoptHomePage.module.css';
+import styles from './AdoptPage.module.css';
 import { EditOutlined, EllipsisOutlined } from '@ant-design/icons';
 import { Button, Card, Select, Space } from 'antd';
 import { useEffect, useState } from 'react';
-import { IAnimalImage, IAnimalItem } from '../../interfaces/animals';
+import { IAnimalItem } from '../../interfaces/animals';
 import { http_service } from '../../api';
 import { Link } from 'react-router-dom';
 import defaultPhoto from '/images/pet-placeholder.png'
@@ -17,14 +17,7 @@ const AdoptPage: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const [filtersVisible, setFiltersVisible] = useState<boolean>(false);
-    const [images, setImages] = useState<IAnimalImage[]>([]);
-
-
-    useEffect(() => {
-        http_service
-            .get<IAnimalImage[]>(`media/animals/1.jpg`)
-    })
-
+   
     // for adopt button visibility
     const isHomePage = location.pathname == '/' || location.pathname == '/home';
     console.log("API URL: ", import.meta.env.VITE_API_URL);
@@ -166,9 +159,9 @@ const AdoptPage: React.FC = () => {
                     )}
                 </div>
 
-
-
             </div>
         </>
     );
 };
+
+export default AdoptPage;

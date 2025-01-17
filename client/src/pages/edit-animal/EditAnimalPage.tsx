@@ -34,28 +34,28 @@ const EditAnimalPage = () => {
             });
     }, []);
 
-    useEffect(() => {
-        http_service.get<IAnimalItem>(`/animals/detail/${id}`)
-            .then(resp => {
-                console.log("API Response: ", resp.data);
-                const { data } = resp;
-                form.setFieldsValue({ ...resp.data });
+    // useEffect(() => {
+    //     http_service.get<IAnimalItem>(`/animals/detail/${id}`)
+    //         .then(resp => {
+    //             console.log("API Response: ", resp.data);
+    //             const { data } = resp;
+    //             form.setFieldsValue({ ...resp.data });
 
-                const newFileList: UploadFile[] = [];
-                for (let i = 0; i < data.images.length; i++) {
-                    newFileList.push({
-                        uid: data.uploaded_images[i],
-                        name: data.uploaded_images[i],
-                        status: "done",
-                        originFileObj: new File([new Blob([''])], data.uploaded_images[i]),
-                    } as UploadFile);
-                }
-                setFiles(newFileList);
-            })
-            .catch(error => {
-                console.error("Error fetching product details:", error);
-            });
-    }, []);
+    //             const newFileList: UploadFile[] = [];
+    //             for (let i = 0; i < data.images.length; i++) {
+    //                 newFileList.push({
+    //                     uid: data.uploaded_images[i],
+    //                     name: data.uploaded_images[i],
+    //                     status: "done",
+    //                     originFileObj: new File([new Blob([''])], data.uploaded_images[i]),
+    //                 } as UploadFile);
+    //             }
+    //             setFiles(newFileList);
+    //         })
+    //         .catch(error => {
+    //             console.error("Error fetching product details:", error);
+    //         });
+    // }, []);
 
     const onSubmit = async (values: IAnimalEdit) => {
         try {
