@@ -8,5 +8,5 @@ urlpatterns = [
     path('detail/<int:pk>', views.AnimalDetail.as_view()),
     path('delete/<int:pk>', views.DeleteAnimal.as_view()),
     path('update/<int:pk>', views.UpdateAnimal.as_view()),
-    path('select-items/', views.AnimalSelectItemView.as_view()),
+    path('select-items', views.AnimalSelectItemView.as_view()),
 ]
