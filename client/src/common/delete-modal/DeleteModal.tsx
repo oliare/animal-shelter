@@ -6,9 +6,10 @@ interface Props {
     title: string;
     description: string;
     onSubmit: () => void;
+    children?: React.ReactNode; 
 }
 
-export const DeleteDialog: React.FC<Props> = ({ title, description, onSubmit }) => {
+export const DeleteDialog: React.FC<Props> = ({ title, description, onSubmit, children }) => {
     const [open, setOpen] = useState(false);
 
     const handleOk = () => {
@@ -32,6 +33,7 @@ export const DeleteDialog: React.FC<Props> = ({ title, description, onSubmit }) 
                     style: { backgroundColor: "#ff4d4f", color: "#fff" },
                 }}>
                 <p>{description}</p>
+                {children}
             </Modal>
         </>
     );

@@ -6,21 +6,24 @@ import AboutUsPage from './pages/about/AboutUsPage';
 import AdoptPage from './pages/adopt/AdoptPage';
 import CreateAnimalPage from './pages/create-animal/CreateAnimalPage';
 import EditAnimalPage from './pages/edit-animal/EditAnimalPage';
+import { Provider } from 'react-redux';
+import { store } from './store/store';
 
-function App() {
-
+const App = () => {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<HomePage />} />
-          <Route path='/create-animal' element={<CreateAnimalPage />} />
-          <Route path='/update/:id' element={<EditAnimalPage />} />
-          <Route path='/about-us' element={<AboutUsPage />} />
-          <Route path='/adopt' element={<AdoptPage />} />
-        </Route>
-      </Routes>
-    </Router>
+    <Provider store={store}>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Layout />}>
+            <Route index element={<HomePage />} />
+            <Route path='/create-animal' element={<CreateAnimalPage />} />
+            <Route path='/update/:id' element={<EditAnimalPage />} />
+            <Route path='/about-us' element={<AboutUsPage />} />
+            <Route path='/adopt' element={<AdoptPage />} />
+          </Route>
+        </Routes>
+      </Router>
+    </Provider>
   )
 }
 

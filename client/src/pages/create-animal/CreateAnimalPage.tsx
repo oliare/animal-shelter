@@ -1,17 +1,23 @@
 import { useEffect, useState } from 'react';
-import { Form, Input, Button, Modal, Upload, UploadFile, Space, Select, Checkbox } from 'antd';
+import { Form, Input, Button, Modal, Upload, UploadFile, Space, Select, Checkbox, notification } from 'antd';
 import { useNavigate, Link } from 'react-router-dom';
-import { http_service } from '../../api';
 import { RcFile, UploadChangeParam } from "antd/es/upload";
 import { PlusOutlined } from '@ant-design/icons';
 import { IAnimalCreate, ISelectParams } from '../../interfaces/animals';
-// import Loader from '../../common/loader/Loader';
+import { useCreateAnimalMutation, useGetAnimalSelectItemsQuery } from '../../services/apiAnimal';
 
 const CreateAnimalPage = () => {
 
     const navigate = useNavigate();
     const [form] = Form.useForm<IAnimalCreate>();
-    // const [loading, setLoading] = useState<boolean>(false);
+    const [createAnimal] = useCreateAnimalMutation();
+    const { data: selectItems } = useGetAnimalSelectItemsQuery();
+
+    const [previewOpen, setPreviewOpen] = useState<boolean>(false);
+    const [previewImage, setPreviewImage] = useState('');
+    const [previewTitle, setPreviewTitle] = useState('');
+
+    const [isPurebred, setIsPurebred] = useState<boolean>(false);
 
     const [params, setParams] = useState<ISelectParams>({
         species: {},
@@ -19,21 +25,19 @@ const CreateAnimalPage = () => {
         age: {},
         breed: {}
     });
-    const [previewOpen, setPreviewOpen] = useState<boolean>(false);
-    const [isPurebred, setIsPurebred] = useState<boolean>(false);
-    const [previewImage, setPreviewImage] = useState('');
-    const [previewTitle, setPreviewTitle] = useState('');
 
     useEffect(() => {
-        http_service.get<ISelectParams>("animals/select-items/")
-            .then(resp => {
-                setParams(resp.data);
+        if (selectItems) {
+            setParams({
+                species: selectItems.species || {},
+                gender: selectItems.gender || {},
+                age: selectItems.age || {},
+                breed: selectItems.breed || {}
             });
-    }, []);
-
+        }
+    }, [selectItems]);
 
     const onSubmit = async (values: IAnimalCreate) => {
-        // setLoading(true);
         try {
             const animalData = {
                 ...values,
@@ -85,17 +89,21 @@ const CreateAnimalPage = () => {
             // Convert animalData to FormData
             const formData = convertToFormData(animalData);
 
-            http_service.post<IAnimalCreate>("animals/create", formData,
-                {
-                    headers: { "Content-Type": "multipart/form-data" }
-                }).then(resp => {
-                    console.log("Animal created:", resp.data);
-                    navigate(`/adopt`);
-                });
-        } catch (error) {
-            console.error("Error creating animal:", error);
-        } finally {
-            // setLoading(false);
+            const response = await createAnimal(formData).unwrap();
+            console.log("Animal created:", response);
+
+            notification.success({
+                message: 'Animal created!',
+                description: 'The animal was created successfully!',
+            });
+
+            navigate(`/adopt`);
+
+        } catch {
+            notification.error({
+                message: 'Creation failed',
+                description: 'Unable to create animal. Try again later.',
+            });
         }
     };
 
@@ -104,9 +112,6 @@ const CreateAnimalPage = () => {
     };
 
     return (
-        // <> {loading ? (
-        // <Loader />
-        // ) : (
         <>
             <p className="text-center text-3xl font-bold mt-[120px] mb-7">Create Animal</p>
             <Form form={form} onFinish={onSubmit} labelCol={{ span: 7 }} wrapperCol={{ span: 11 }}>
@@ -205,29 +210,6 @@ const CreateAnimalPage = () => {
                         </div>
                     </Upload>
                 </Form.Item>
-                {/* <Form.Item name="uploaded_images" label="Photo" valuePropName="Image"
-                    rules={[{ required: true, message: "Please provide an animal image." }]}
-                    getValueFromEvent={(e: UploadChangeParam) => {
-                        return e?.fileList.map(file => file.originFileObj);
-                    }}>
-
-                    <Upload beforeUpload={() => false} accept="image/*" maxCount={10} listType="picture-card" multiple
-                        onPreview={(file: UploadFile) => {
-                            if (!file.url && !file.preview) {
-                                file.preview = URL.createObjectURL(file.originFileObj as RcFile);
-                            }
-
-                            setPreviewImage(file.url || (file.preview as string));
-                            setPreviewOpen(true);
-                            setPreviewTitle(file.name || file.url!.substring(file.url!.lastIndexOf('/') + 1));
-                        }}>
-
-                        <div>
-                            <PlusOutlined />
-                            <div style={{ marginTop: 8 }}>Upload</div>
-                        </div>
-                    </Upload>
-                </Form.Item> */}
 
                 <Form.Item wrapperCol={{ span: 10, offset: 10 }}>
                     <Space>
@@ -243,8 +225,6 @@ const CreateAnimalPage = () => {
                 <img alt="example" style={{ width: '100%' }} src={previewImage} />
             </Modal>
         </>
-        // )}
-        // </>
     );
 };
 

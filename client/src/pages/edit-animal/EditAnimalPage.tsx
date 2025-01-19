@@ -1,19 +1,26 @@
 import { useEffect, useState } from 'react';
-import { Form, Input, Button, Modal, Upload, UploadFile, Space, Select, Checkbox } from 'antd';
+import { Form, Input, Button, Modal, Upload, UploadFile, Space, Select, Checkbox, notification } from 'antd';
 import { useNavigate, Link, useParams } from 'react-router-dom';
-import { http_service } from '../../api';
 import { RcFile, UploadChangeParam } from "antd/es/upload";
 import { PlusOutlined } from '@ant-design/icons';
-import { IAnimalEdit, IAnimalItem, ISelectParams } from '../../interfaces/animals';
-// import Loader from '../../common/loader/Loader';
+import { IAnimalEdit, ISelectParams } from '../../interfaces/animals';
+import { useGetAnimalQuery, useGetAnimalSelectItemsQuery, useUpdateAnimalMutation } from '../../services/apiAnimal';
 
 const EditAnimalPage = () => {
 
     const { id } = useParams();
     const navigate = useNavigate();
     const [form] = Form.useForm<IAnimalEdit>();
-    const [files, setFiles] = useState<UploadFile[]>([]);
-    // const [loading, setLoading] = useState<boolean>(false);
+
+    const { data: selectItems } = useGetAnimalSelectItemsQuery();
+    const { data: animal } = useGetAnimalQuery(Number(id));
+    const [updateAnimal] = useUpdateAnimalMutation();
+
+    const [previewOpen, setPreviewOpen] = useState<boolean>(false);
+    const [isPurebred, setIsPurebred] = useState<boolean>(false);
+    const [previewImage, setPreviewImage] = useState('');
+    const [previewTitle, setPreviewTitle] = useState('');
+    // const [files, setFiles] = useState<UploadFile[]>([]);
 
     const [params, setParams] = useState<ISelectParams>({
         species: {},
@@ -22,58 +29,51 @@ const EditAnimalPage = () => {
         breed: {}
     });
 
-    const [previewOpen, setPreviewOpen] = useState<boolean>(false);
-    const [isPurebred, setIsPurebred] = useState<boolean>(false);
-    const [previewImage, setPreviewImage] = useState('');
-    const [previewTitle, setPreviewTitle] = useState('');
-
     useEffect(() => {
-        http_service.get<ISelectParams>("animals/select-items/")
-            .then(resp => {
-                setParams(resp.data);
+        if (selectItems) {
+            setParams({
+                species: selectItems.species || {},
+                gender: selectItems.gender || {},
+                age: selectItems.age || {},
+                breed: selectItems.breed || {}
             });
-    }, []);
+        }
+    }, [selectItems]);
 
-    // useEffect(() => {
-    //     http_service.get<IAnimalItem>(`/animals/detail/${id}`)
-    //         .then(resp => {
-    //             console.log("API Response: ", resp.data);
-    //             const { data } = resp;
-    //             form.setFieldsValue({ ...resp.data });
-
-    //             const newFileList: UploadFile[] = [];
-    //             for (let i = 0; i < data.images.length; i++) {
-    //                 newFileList.push({
-    //                     uid: data.uploaded_images[i],
-    //                     name: data.uploaded_images[i],
-    //                     status: "done",
-    //                     originFileObj: new File([new Blob([''])], data.uploaded_images[i]),
-    //                 } as UploadFile);
-    //             }
-    //             setFiles(newFileList);
-    //         })
-    //         .catch(error => {
-    //             console.error("Error fetching product details:", error);
-    //         });
-    // }, []);
+    
+    useEffect(() => {
+        if (animal) {
+            form.setFieldsValue({ 
+                ...animal,
+                // uploaded_images: animal.images.map(image => ({ url: image })) 
+            });
+        }
+    }, [animal, form]);
 
     const onSubmit = async (values: IAnimalEdit) => {
         try {
+            const animal = await updateAnimal({ ...values, id: Number(id) }).unwrap();
             const updatedAnimal: IAnimalEdit = {
                 ...values,
-                uploaded_images: files
-                    .map(file => file.originFileObj as File),
+                // uploaded_images: files
+                //     .map(file => file.originFileObj as File),
             };
 
             console.log("Animal updated: ", updatedAnimal);
-            // const resp = await http_service.put<IAnimalEdit>(`/animals/update`, updatedAnimal, {
-            //     headers: { "Content-Type": "multipart/form-data" }
-            // });
 
-            // console.log("Animal updated: ", resp.data);
-            // navigate('/adopt');
+            notification.success({
+                message: 'Animal updated!',
+                description: 'The animal was updated successfully!',
+            });
+
+            console.log("Animal updated: ", animal);
+            navigate('/adopt');
+
         } catch (error) {
-            console.error("Error updating animal: ", error);
+            notification.error({
+                message: 'Updating failed',
+                description: 'Unable to update animal. Try again later.',
+            });
         }
     };
 
@@ -83,12 +83,9 @@ const EditAnimalPage = () => {
     };
 
     return (
-        // <> {loading ? (
-        // <Loader />
-        // ) : (
         <>
             <p className="text-center text-3xl font-bold mt-[120px] mb-7">Edit Animal</p>
-            <Form form={form} onFinish={onSubmit} labelCol={{ span: 7 }} wrapperCol={{ span: 11 }}>
+            <Form form={form} onFinish={onSubmit} labelCol={{ span: 7 }} wrapperCol={{ span: 11 }} initialValues={animal}>
                 <Form.Item name="name" label="Name" hasFeedback
                     rules={[{ required: true, message: 'Please provide a valid name.' }]}>
                     <Input placeholder='Type animal name' />
@@ -199,8 +196,6 @@ const EditAnimalPage = () => {
                 <img alt="example" style={{ width: '100%' }} src={previewImage} />
             </Modal>
         </>
-        // )}
-        // </>
     );
 };
 

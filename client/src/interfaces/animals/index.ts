@@ -14,12 +14,18 @@ export interface IAnimalItem {
     images: string[];
 }
 
+export interface IImageItem {
+    id: number;
+    animal: number;
+    photo: string;
+}
+
 export interface IAnimalCreate {
     name: string;
     species: string;
     gender: string;
     age: string;
-    breed: string;
+    breed?: string;
     description?: string;
     location: string;
     neutered?: boolean;
@@ -32,12 +38,13 @@ export interface IAnimalEdit {
     species: string;
     gender: string;
     age: string;
-    breed: string;
+    breed?: string;
     description?: string;
     location: string;
     neutered?: boolean;
     vaccinated?: boolean;
-    uploaded_images: File[]; 
+    images: string[];
+    uploaded_images: IUploadedFile[]; 
 }
 
 export interface ISelectParams {
@@ -45,4 +52,16 @@ export interface ISelectParams {
     gender: Record<string, string>;
     age: Record<string, string>;
     breed: Record<string, string>;
+}
+
+export interface IUploadedFile {
+    id: number;
+    image: string;
+    priority: number;
+    preview: any;
+    url: any;
+    originFileObj: File;
+    size: number;
+    type: string;
+    uid: string;
 }

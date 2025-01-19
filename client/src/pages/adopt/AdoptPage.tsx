@@ -1,55 +1,41 @@
 import styles from './AdoptPage.module.css';
 import { EditOutlined, EllipsisOutlined } from '@ant-design/icons';
-import { Button, Card, Select, Space } from 'antd';
-import { useEffect, useState } from 'react';
-import { IAnimalItem } from '../../interfaces/animals';
-import { http_service } from '../../api';
+import { Button, Card, notification, Select, Space } from 'antd';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import defaultPhoto from '/images/pet-placeholder.png'
 import { DeleteDialog } from '../../common/delete-modal/DeleteModal';
+import { useDeleteAnimalMutation, useGetAnimalsQuery } from '../../services/apiAnimal';
 
 const { Meta } = Card;
 
-const AdoptPage: React.FC = () => {
-    const userRole = 'admin';
+const AdoptPage = () => {
+    const { data: animals } = useGetAnimalsQuery()
 
-    const [items, setItems] = useState<IAnimalItem[]>([]);
-    const [loading, setLoading] = useState<boolean>(true);
-    const [error, setError] = useState<string | null>(null);
     const [filtersVisible, setFiltersVisible] = useState<boolean>(false);
-   
+    const [deleteAnimal] = useDeleteAnimalMutation()
+
+    const userRole = 'admin';
+    
     // for adopt button visibility
     const isHomePage = location.pathname == '/' || location.pathname == '/home';
-    console.log("API URL: ", import.meta.env.VITE_API_URL);
-
-    useEffect(() => {
-        http_service
-            .get<IAnimalItem[]>(`/animals/`)
-            .then((response) => {
-                setItems(response.data);
-                setLoading(false);
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-                setError('Failed to load data');
-                setLoading(false);
-            });
-    }, []);
-
-    if (loading) return <div>Loading...</div>;
-    if (error) return <div>{error}</div>;
 
     const toggleFilters = () => {
         setFiltersVisible(!filtersVisible);
     };
 
-    const handleDelete = (id: number) => {
+    const handleDelete = async (id: number) => {
         try {
-            http_service.delete(`animals/delete/${id}`)
-            setItems(items.filter(i => i.id != id))
-            console.log(`The product with id ${id} has been deleted`);
-        } catch (error) {
-            console.log("Animal deletion error: ", error);
+            await deleteAnimal(id).unwrap();
+            notification.success({
+                message: 'Animal deleted',
+                description: 'The animal was deleted successfully!',
+            });
+        } catch {
+            notification.error({
+                message: 'Delete failed',
+                description: 'Something went wrong. Try again.',
+            });
         }
     }
 
@@ -117,27 +103,25 @@ const AdoptPage: React.FC = () => {
 
                 </div>
 
-                {/* <div className="flex flex-wrap justify-center items-center gap-10"> */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 :grid-cols-4 lg:grid-cols-4 gap-8">
 
-                    {items && Array.isArray(items) && items.length > 0 ? (
-                        (isHomePage ? items.slice(0, 4) : items).map((item) => (
+                    {animals ? (
+                        (isHomePage ? animals.slice(0, 4) : animals).map((item) => (
 
                             <Card
                                 className={`${styles.card} shadow-lg mb-10`}
                                 key={item.id}
                                 style={{ width: 300 }}
                                 cover={
-                                    <img
-                                        // src={defaultPhoto}
-                                        src={item.images[0] ? `http://127.0.0.1:8000/media/animals/${item.images[0]}` : defaultPhoto}
-                                        alt={item.name}
-                                        className="w-full h-auto"
-                                    />
-                                }
-                                actions={
+                                    item.images ? (
+                                        item.images.map(() => (
+                                            <img src={item.images[0].photo} alt={item.name} />
+                                        ))
+                                    ) : (<img src={defaultPhoto} alt="default" />)}
+
+                                actions={ 
                                     userRole === 'admin'
-                                        ? [
+                                        ? [ 
                                             <Link to={`/update/${item.id}`}><EditOutlined key="edit" /></Link>,
                                             <EllipsisOutlined key="ellipsis" />,
                                             <DeleteDialog title={"Notification"}
@@ -159,7 +143,7 @@ const AdoptPage: React.FC = () => {
                     )}
                 </div>
 
-            </div>
+            </div >
         </>
     );
 };
