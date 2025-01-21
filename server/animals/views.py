@@ -1,9 +1,10 @@
+import os
+from django.conf import settings
 from rest_framework import generics
 from rest_framework.views import APIView
 from .serializers import AnimalSerializer
-from .models import Animal
+from .models import Animal, AnimalImage
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
 
 
 class AnimalList(generics.ListAPIView):
@@ -21,6 +22,18 @@ class UpdateAnimal(generics.UpdateAPIView):
 class DeleteAnimal(generics.DestroyAPIView):
     queryset = Animal.objects.all()
     serializer_class = AnimalSerializer
+
+    def perform_destroy(self, instance):
+        images = AnimalImage.objects.filter(animal=instance)
+        for image in images:
+            if image.photo:
+                path = os.path.join(settings.MEDIA_ROOT, str(image.photo))
+                if os.path.exists(path):
+                    os.remove(path)
+            image.delete()  
+        
+        instance.delete()
+        return Response(status=204)
 
 class AnimalDetail(generics.RetrieveAPIView):
     queryset = Animal.objects.all()
