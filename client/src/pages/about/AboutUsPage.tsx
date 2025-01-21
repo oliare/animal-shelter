@@ -1,6 +1,34 @@
+import { useEffect, useState } from 'react';
 import styles from './AboutUsPage.module.css';
 
 const AboutUsPage = () => {
+    
+    // TODO dynamic increase
+    const [adoptedPets, setAdoptedPets] = useState(0);
+    const [volunteers, setVolunteers] = useState(0);
+    const [donations, setDonations] = useState(0);
+
+    const incrementNumber = (target: any, set: any, speed : any) => {
+        let begin = 0;
+        const increment = Math.ceil(target / (speed / 10)); 
+        const timer = setInterval(() => {
+            begin += increment;
+            
+            if (begin >= target) {
+                begin = target;
+                clearInterval(timer);
+            }
+            set(begin);
+        }, 10);
+    };
+
+    useEffect(() => {
+        incrementNumber(2500, setAdoptedPets, 2000); 
+        incrementNumber(200, setVolunteers, 1500); 
+        incrementNumber(1000, setDonations, 2500); 
+    }, []);
+    //   
+
     return (
         <div className={styles['container']}>
             <div className={styles['who-we-are']}>
@@ -11,7 +39,7 @@ const AboutUsPage = () => {
                         a comfortable living environment. We work closely with organizations, shelters, and volunteers.
                     </p>
                 </div>
-                <div className={styles['achievements']}><span className={styles['number']}>2 500</span> Pets adopted</div>
+                <div className={styles['achievements']}><span className={styles['number']}>{adoptedPets}</span> Pets adopted</div>
                 <div className={styles['about-image']}>
                     <img src="/images/cats/cat-home.png" alt="Who We Are" />
                 </div>
@@ -21,7 +49,7 @@ const AboutUsPage = () => {
                 <div className={styles['about-image']}>
                     <img src="/images/dogs/dog-home.png" alt="Our Mission" />
                 </div>
-                <div className={styles['achievements']}><span className={styles['number']}>200 +</span>Volunteers</div>
+                <div className={styles['achievements']}><span className={styles['number']}>{volunteers} +</span>Volunteers</div>
                 <div className={styles['about-content']}>
                     <h2>Our Mission</h2>
                     <p>
@@ -41,7 +69,7 @@ const AboutUsPage = () => {
                         <li>Collaborating with shelters and volunteers.</li>
                     </ul>
                 </div>
-                <div className={`${styles['achievements']} mt-5`}><span className={styles['number']}>1k</span> Donations raised</div>
+                <div className={`${styles['achievements']} mt-5`}><span className={styles['number']}>{donations}</span> Donations raised</div>
                 <div className={styles['about-image']}>
                     <img src="/images/cats/cat-dog.png" alt="What We Do" />
                 </div>

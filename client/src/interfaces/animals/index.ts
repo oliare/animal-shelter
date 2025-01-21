@@ -1,50 +1,36 @@
-export interface IAnimalItem {
-    id: number;
+interface BaseAnimalItem {
     name: string;
     species: string;
     gender: string;
     age: string;
-    breed: string;
-    description: string;
+    breed?: string;
+    description?: string;
     found_home: boolean;
     location: string;
     date_added: Date;
     neutered: boolean;
     vaccinated: boolean;
-    images: string[];
 }
 
-export interface IImageItem {
+export interface IAnimalItem extends BaseAnimalItem {
+    id: number;
+    images: IImageItem[];
+}
+
+export interface IImageItem extends BaseAnimalItem  {
     id: number;
     animal: number;
     photo: string;
 }
 
-export interface IAnimalCreate {
-    name: string;
-    species: string;
-    gender: string;
-    age: string;
-    breed?: string;
-    description?: string;
-    location: string;
-    neutered?: boolean;
-    vaccinated?: boolean;
-    uploaded_images: File[]; 
+export interface IAnimalCreate extends BaseAnimalItem {
+    uploaded_images: File[];
 }
-export interface IAnimalEdit {
+
+export interface IAnimalEdit extends BaseAnimalItem {
     id: number;
-    name: string;
-    species: string;
-    gender: string;
-    age: string;
-    breed?: string;
-    description?: string;
-    location: string;
-    neutered?: boolean;
-    vaccinated?: boolean;
-    images: string[];
-    uploaded_images: IUploadedFile[]; 
+    images: IImageItem[];
+    uploaded_images: IUploadedFile[];
 }
 
 export interface ISelectParams {

@@ -41,8 +41,10 @@ const CreateAnimalPage = () => {
         try {
             const animalData = {
                 ...values,
-                vaccinated: values.vaccinated !== undefined ? values.vaccinated : false,
-                neutered: values.neutered !== undefined ? values.neutered : false,
+                neutered: values.neutered || false,
+                vaccinated: values.vaccinated || false,
+                breed: values.breed || '',
+                description: values.description || '',
             };
             console.log("Send Data:", animalData);
             console.log("Images:", animalData.uploaded_images);
@@ -179,10 +181,10 @@ const CreateAnimalPage = () => {
                 </Form.Item>
 
                 <Form.Item label="Additional info" className='mb-0'>
-                    <Form.Item name="neutered" className='mb-2' initialValue={false} valuePropName="checked">
+                    <Form.Item name="neutered" className='mb-2' valuePropName="checked">
                         <Checkbox>Neutered</Checkbox>
                     </Form.Item>
-                    <Form.Item name="vaccinated" initialValue={false} valuePropName="checked">
+                    <Form.Item name="vaccinated" valuePropName="checked">
                         <Checkbox>Vaccinated</Checkbox>
                     </Form.Item>
                 </Form.Item>

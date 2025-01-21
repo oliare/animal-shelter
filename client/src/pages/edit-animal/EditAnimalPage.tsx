@@ -40,13 +40,10 @@ const EditAnimalPage = () => {
         }
     }, [selectItems]);
 
-    
+
     useEffect(() => {
         if (animal) {
-            form.setFieldsValue({ 
-                ...animal,
-                // uploaded_images: animal.images.map(image => ({ url: image })) 
-            });
+            form.setFieldsValue({ ...animal });
         }
     }, [animal, form]);
 
@@ -85,7 +82,7 @@ const EditAnimalPage = () => {
     return (
         <>
             <p className="text-center text-3xl font-bold mt-[120px] mb-7">Edit Animal</p>
-            <Form form={form} onFinish={onSubmit} labelCol={{ span: 7 }} wrapperCol={{ span: 11 }} initialValues={animal}>
+            <Form form={form} onFinish={onSubmit} labelCol={{ span: 7 }} wrapperCol={{ span: 11 }}>
                 <Form.Item name="name" label="Name" hasFeedback
                     rules={[{ required: true, message: 'Please provide a valid name.' }]}>
                     <Input placeholder='Type animal name' />
@@ -126,7 +123,7 @@ const EditAnimalPage = () => {
 
                 <Form.Item name="breed" label="Breed" hasFeedback>
                     <Select placeholder="Breed" onChange={(value) => setIsPurebred(value === "Purebred")}>
-                        {filterOptions(params.breed).map(([key, value]) => (
+                        {params.breed && filterOptions(params.breed).map(([key, value]) => (
                             <Select.Option key={value} value={value}>
                                 {key}
                             </Select.Option>

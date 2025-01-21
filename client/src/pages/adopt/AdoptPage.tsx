@@ -64,7 +64,7 @@ const AdoptPage = () => {
                                 <button className={`${styles.btnAllPets} flex items-center`}>
                                     <Link to={'/adopt'}>All pets</Link>
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6 ml-3">
-                                        <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm4.28 10.28a.75.75 0 0 0 0-1.06l-3-3a.75.75 0 1 0-1.06 1.06l1.72 1.72H8.25a.75.75 0 0 0 0 1.5h5.69l-1.72 1.72a.75.75 0 1 0 1.06 1.06l3-3Z" clip-rule="evenodd" />
+                                        <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm4.28 10.28a.75.75 0 0 0 0-1.06l-3-3a.75.75 0 1 0-1.06 1.06l1.72 1.72H8.25a.75.75 0 0 0 0 1.5h5.69l-1.72 1.72a.75.75 0 1 0 1.06 1.06l3-3Z" clipRule="evenodd" />
                                     </svg>
                                 </button>
                             </div>
@@ -114,14 +114,12 @@ const AdoptPage = () => {
                                 style={{ width: 300 }}
                                 cover={
                                     item.images ? (
-                                        item.images.map(() => (
-                                            <img src={item.images[0].photo} alt={item.name} />
-                                        ))
+                                        <img src={item.images[0].photo} alt={item.name} />
                                     ) : (<img src={defaultPhoto} alt="default" />)}
 
-                                actions={ 
+                                actions={
                                     userRole === 'admin'
-                                        ? [ 
+                                        ? [
                                             <Link to={`/update/${item.id}`}><EditOutlined key="edit" /></Link>,
                                             <EllipsisOutlined key="ellipsis" />,
                                             <DeleteDialog title={"Notification"}
