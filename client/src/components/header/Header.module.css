@@ -6,24 +6,19 @@
     position: absolute;
     z-index: 100;
     width: 100%;
-    /* background-image: url('images/home-page.png');
-    position: fixed;
-    height: 13vh;
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed; */
 }
 
-.header ul li {
+.header ul a {
     display: inline-block;
     position: relative;
+    font-weight: bolder;
 }
 
-.header ul li:hover {
-    color: rgb(123, 89, 89);
+.header ul a:hover {
+    color: rgba(88, 27, 8, 0.79);
 }
 
-.header ul li::after {
+.header ul a::after {
     content: '';
     position: absolute;
     bottom: 0;
@@ -35,7 +30,7 @@
     transition: transform 0.3s ease-out;
 }
 
-.header ul li:hover::after {
+.header ul a:hover::after {
     transform: scaleX(1);
 }
 
@@ -43,6 +38,7 @@
     margin-right: 10px;
     border: 1px solid rgb(77, 77, 77);
     border-radius: 10px;
+    font-weight: bolder;
 }
 
 .btn-login:hover {
@@ -55,11 +51,86 @@
     background-color: rgba(116, 116, 116, 0.67);
     border: 1px solid rgb(77, 77, 77);
     border-radius: 10px;
+    font-weight: bolder;
 }
 
 .btn-register:hover {
-    
     border: 1px solid rgba(255, 255, 255, 0.518);
     color: rgba(221, 221, 221, 0.79);
     box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.4);
 }
+
+
+/* for hamburger menu */
+.menuOpenHeader::before {
+    background-image: none;
+}
+
+.menuOpen ul a {
+    background-color: rgba(227, 227, 227, 0.829);
+    border: 1px solid rgb(52, 51, 50);
+    border-radius: 10px;
+    width: 100%;
+    margin-bottom: 2px;
+    padding: 7px 0px 7px 15px;
+    font-weight: bolder;
+    text-align: center;
+    font-size: large;
+    transition: all 0.3s ease;
+}
+
+.menuOpen ul a:hover {
+    transform: scale(0.95);
+}
+
+.menuOpen ul a:hover::after {
+    transform: scaleX(0);
+}
+
+/* belong to other header pages  */
+.otherHeader {
+    background-color: rgba(255, 255, 255, 0.867);
+    position: fixed;
+    background-size: contain;
+    background-position: center;
+    height: 100px;
+    box-shadow: 0 4px 6px rgba(146, 55, 30, 0.173); 
+}
+
+.otherHeader::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 50%;
+    top: 65px;
+    /* background-image: url('/images/pets.png'); */
+    background-size: contain;
+    background-position: center;
+    background-repeat: repeat;
+    z-index: -1;
+}
+
+.otherHeader .menuOpen ul a {
+    background-color: rgba(255, 255, 255, 0.947);
+    border: 1px solid rgb(123, 123, 123);
+}
+
+.otherHeader .btn-register {
+    background-color: rgba(91, 7, 7, 0.125);
+}
+
+.otherHeader .btn-login:hover {
+    border: 1px solid rgba(100, 30, 9, 0.742);
+}
+
+.otherHeader .btn-register:hover {
+    border: 1px solid rgba(59, 9, 9, 0.518);
+}
+
+.otherHeader .btn-login:hover,
+.otherHeader .btn-register:hover {
+    background-color: rgb(255, 255, 255);
+    color: rgba(100, 30, 9, 0.79);
+    box-shadow: 0px 0px 10px rgba(116, 58, 13, 0.537);
+}
+

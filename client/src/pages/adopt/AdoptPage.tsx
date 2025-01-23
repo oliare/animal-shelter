@@ -114,7 +114,7 @@ const AdoptPage = () => {
                                 style={{ width: 300 }}
                                 cover={
                                     item.images ? (
-                                        <img src={item.images[0].photo} alt={item.name} />
+                                        <img src={item?.images[0]?.photo} alt={item.name} />
                                     ) : (<img src={defaultPhoto} alt="default" />)}
 
                                 actions={

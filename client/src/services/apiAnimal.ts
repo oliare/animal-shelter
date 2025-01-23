@@ -27,14 +27,15 @@ export const api_animal = createApi({
             }),
             invalidatesTags: ["Animal"],
         }),
-        updateAnimal: builder.mutation<IAnimalCreate, IAnimalEdit>({
-            query: ({ id, ...updatedAnimal }) => ({
-                url: `animals/update/${id}`,
+        updateAnimal: builder.mutation<void, FormData>({
+            query: (formData) => ({
+                url: `animals/update/${formData.get('id')}`,
                 method: 'PUT',
-                body: updatedAnimal,
+                body: formData,
             }),
-            invalidatesTags: (_, __, { id }) => [{ type: 'Animal', id }],
+            invalidatesTags: ["Animal"],
         }),
+
         deleteAnimal: builder.mutation<{ success: boolean }, number>({
             query: (id) => ({
                 url: `animals/delete/${id}`,

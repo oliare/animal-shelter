@@ -30,7 +30,8 @@ export interface IAnimalCreate extends BaseAnimalItem {
 export interface IAnimalEdit extends BaseAnimalItem {
     id: number;
     images: IImageItem[];
-    uploaded_images: IUploadedFile[];
+    uploaded_images?: File[];
+    remove_images?: number[] ;
 }
 
 export interface ISelectParams {
@@ -38,16 +39,4 @@ export interface ISelectParams {
     gender: Record<string, string>;
     age: Record<string, string>;
     breed: Record<string, string>;
-}
-
-export interface IUploadedFile {
-    id: number;
-    image: string;
-    priority: number;
-    preview: any;
-    url: any;
-    originFileObj: File;
-    size: number;
-    type: string;
-    uid: string;
 }
