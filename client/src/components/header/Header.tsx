@@ -73,13 +73,13 @@ const Header = () => {
                                 <li> <Link to="/adopt" onClick={() => setMenuOpen(false)}
                                     className={linkClass}>Adopt</Link>
                                 </li>
-                                <li> <Link to="#" onClick={() => setMenuOpen(false)}
+                                <li> <Link to="/how-to-help" onClick={() => setMenuOpen(false)}
                                     className={linkClass}>How to help</Link>
                                 </li>
-                                <li> <Link to="#" onClick={() => setMenuOpen(false)}
+                                <li> <Link to="/adopted-pets" onClick={() => setMenuOpen(false)}
                                     className={linkClass}>Adopted animals</Link>
                                 </li>
-                                <li> <Link to="#" onClick={() => setMenuOpen(false)}
+                                <li> <Link to="/contact" onClick={() => setMenuOpen(false)}
                                     className={linkClass}>Contact</Link>
                                 </li>
                             </ul>

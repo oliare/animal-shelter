@@ -1,4 +1,4 @@
-import './App.css'
+import './App.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Layout from './components/layout/Layout';
 import HomePage from './pages/home/HomePage';
@@ -9,6 +9,8 @@ import EditAnimalPage from './pages/edit-animal/EditAnimalPage';
 import AnimalDetailsPage from './pages/detail/AnimalDetailsPage';
 import { Provider } from 'react-redux';
 import { store } from './store/store';
+import ContactPage from './pages/contact/ContactPage';
+import NotFoundPage from './common/404/NotFoundPage';
 
 const App = () => {
   return (
@@ -17,16 +19,18 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<HomePage />} />
-            <Route path='/create-animal' element={<CreateAnimalPage />} />
-            <Route path='/update/:id' element={<EditAnimalPage />} />
-            <Route path='/about-us' element={<AboutUsPage />} />
-            <Route path='/adopt' element={<AdoptPage />} />
-            <Route path='/detail/:id' element={<AnimalDetailsPage />} />
+            <Route path="/create-animal" element={<CreateAnimalPage />} />
+            <Route path="/update/:id" element={<EditAnimalPage />} />
+            <Route path="/about-us" element={<AboutUsPage />} />
+            <Route path="/adopt" element={<AdoptPage />} />
+            <Route path="/detail/:id" element={<AnimalDetailsPage />} />
+            <Route path="/contact" element={<ContactPage />} />
+            <Route path="*" element={<NotFoundPage />} />
           </Route>
         </Routes>
       </Router>
     </Provider>
-  )
-}
+  );
+};
 
-export default App
+export default App;

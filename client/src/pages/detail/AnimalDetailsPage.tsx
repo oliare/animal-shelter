@@ -32,7 +32,7 @@ const AnimalDetailsPage = () => {
   const animalImages = animal?.images?.map((image) => image.photo) || [defaultPhoto];
 
   return (
-    <div className="animal-details-page p-10 mt-[70px]  d-flex align-items-center">
+    <div className="animal-details-page p-10 mt-[90px]  d-flex align-items-center">
       <Row gutter={16}>
         <Col xs={24} sm={12} >
           <PhotoCarousel images={animalImages} />
