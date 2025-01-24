@@ -35,3 +35,14 @@
     transform: translateY(-10px) scale(1.1);
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 }
+
+.card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+}
+
+.card .ant-card-actions {
+    margin-top: auto; 
+}

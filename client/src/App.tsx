@@ -6,6 +6,7 @@ import AboutUsPage from './pages/about/AboutUsPage';
 import AdoptPage from './pages/adopt/AdoptPage';
 import CreateAnimalPage from './pages/create-animal/CreateAnimalPage';
 import EditAnimalPage from './pages/edit-animal/EditAnimalPage';
+import AnimalDetailsPage from './pages/detail/AnimalDetailsPage';
 import { Provider } from 'react-redux';
 import { store } from './store/store';
 
@@ -20,6 +21,7 @@ const App = () => {
             <Route path='/update/:id' element={<EditAnimalPage />} />
             <Route path='/about-us' element={<AboutUsPage />} />
             <Route path='/adopt' element={<AdoptPage />} />
+            <Route path='/detail/:id' element={<AnimalDetailsPage />} />
           </Route>
         </Routes>
       </Router>

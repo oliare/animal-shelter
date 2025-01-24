@@ -121,7 +121,7 @@ const AdoptPage = () => {
                                     userRole === 'admin'
                                         ? [
                                             <Link to={`/update/${item.id}`}><EditOutlined key="edit" /></Link>,
-                                            <EllipsisOutlined key="ellipsis" />,
+                                            <Link to={`/detail/${item.id}`}><EllipsisOutlined key="ellipsis" /></Link>,
                                             <DeleteDialog title={"Notification"}
                                                 description={`Are you sure you want to delete '${item.name}'?`}
                                                 onSubmit={() => handleDelete(item.id)}>
